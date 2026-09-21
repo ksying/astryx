@@ -32,6 +32,7 @@ export const docs = {
       {className: 'astryx-dialog', visualProps: ['variant']},
       {className: 'astryx-dialog-header'},
       {className: 'astryx-dialog-header-title-block'},
+      {className: 'astryx-dialog-header-actions'},
       {className: 'astryx-dialog-header-close-icon'},
     ],
     vars: [

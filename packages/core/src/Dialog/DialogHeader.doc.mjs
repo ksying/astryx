@@ -13,6 +13,7 @@ export const docs = {
     anatomy: [
       {name: 'Header row', required: true, description: 'Arranges the title block, optional start/end content, and close control.'},
       {name: 'Title block', required: true, description: 'Groups the title and optional subtitle.'},
+      {name: 'Actions', required: false, description: 'Groups optional end content with the close control.'},
       {name: 'Close icon', required: false, description: 'Visual close glyph inside the close button.'},
     ],
   },
@@ -84,6 +85,7 @@ export const docs = {
     targets: [
       {className: 'astryx-dialog-header'},
       {className: 'astryx-dialog-header-title-block'},
+      {className: 'astryx-dialog-header-actions'},
       {className: 'astryx-dialog-header-close-icon'},
     ],
   },
@@ -137,6 +139,7 @@ export const docsZh = {
     anatomy: [
       {name: 'Header row', required: true, description: '排列标题区、可选的首尾内容和关闭控件。'},
       {name: 'Title block', required: true, description: '组合标题和可选副标题。'},
+      {name: 'Actions', required: false, description: '组合可选尾部内容和关闭控件。'},
       {name: 'Close icon', required: false, description: '关闭按钮内的关闭图标。'},
     ],
   },
@@ -177,6 +180,7 @@ export const docsZh = {
     targets: [
       {className: 'astryx-dialog-header'},
       {className: 'astryx-dialog-header-title-block'},
+      {className: 'astryx-dialog-header-actions'},
       {className: 'astryx-dialog-header-close-icon'},
     ],
   },
@@ -192,6 +196,7 @@ export const docsDense = {
     anatomy: [
       {name: 'Header row', required: true, description: 'arranges title block, optional start/end content, close control'},
       {name: 'Title block', required: true, description: 'groups title + optional subtitle'},
+      {name: 'Actions', required: false, description: 'groups optional end content + close control'},
       {name: 'Close icon', required: false, description: 'close glyph inside close button'},
     ],
   },

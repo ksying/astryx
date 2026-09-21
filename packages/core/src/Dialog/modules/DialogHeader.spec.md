@@ -14,6 +14,7 @@ verified_by:
   [
     packages/core/src/Dialog/DialogHeader.test.tsx,
     packages/core/src/theme/themingTargets.test.ts,
+    packages/cli/foundation/discovery/theming-targets.test.mjs,
     scripts/check-knowledge.mjs,
   ]
 parent_component: component:Dialog
@@ -25,8 +26,8 @@ references: [architecture:component-theming-surface]
 ## Intent
 
 `DialogHeader` presents the title region of a Dialog and its optional close
-control. This record owns the stable header-row, title-block, and close-icon
-anatomy and their public theming targets.
+control. This record owns the stable header-row, title-block, actions, and
+close-icon anatomy and their public theming targets.
 
 ## Compatibility and migration
 
@@ -43,8 +44,9 @@ Consumer migration instructions belong in consumer docs and release notes.
 
 - The header row that arranges title content and trailing controls.
 - The title block that groups the title and optional subtitle.
+- The actions wrapper that groups optional end content with the close control.
 - The close icon rendered for the optional close action.
-- The `dialog-header`, `dialog-header-title-block`, and
+- The `dialog-header`, `dialog-header-title-block`, `dialog-header-actions`, and
   `dialog-header-close-icon` targets.
 
 **Does not own / non-goals**
@@ -57,13 +59,14 @@ Consumer migration instructions belong in consumer docs and release notes.
 
 ## Public API and concepts
 
-No component prop changes. This contract adds three public theming surfaces for
+No component prop changes. This contract adds four public theming surfaces for
 existing anatomy.
 
 | Concept | Closed values or states | Meaning | Default | Owner | Stability |
 | --- | --- | --- | --- | --- | --- |
 | Header row target | present | Styles the row that arranges title content and controls | Existing row visuals | `module:Dialog/DialogHeader` | stable |
 | Title block target | present | Styles the title/subtitle grouping element | Existing title stack visuals | `module:Dialog/DialogHeader` | stable |
+| Actions target | present when end content or the close action renders | Styles the wrapper that groups trailing actions | Existing actions layout | `module:Dialog/DialogHeader` | stable |
 | Close icon target | present when close action renders | Styles the close glyph itself | Existing medium Icon visuals | `module:Dialog/DialogHeader` | stable |
 
 ## Behavioral contract
@@ -72,8 +75,9 @@ existing anatomy.
 | --- | --- | --- | --- |
 | FR1 | The header row MUST carry `dialog-header` on the element that applies its row layout and gap. | Current implementation and owner decision | settled |
 | FR2 | The title block MUST carry `dialog-header-title-block` on the element that applies its title/subtitle layout and gap. | Current implementation and owner decision | settled |
-| FR3 | The rendered close Icon MUST carry `dialog-header-close-icon` on the glyph element that applies icon presentation. | Current implementation and owner decision | settled |
-| FR4 | Omitting `onOpenChange` MUST continue to omit the close action and its optional close-icon anatomy. | Released behavior | settled |
+| FR3 | The trailing actions wrapper MUST carry `dialog-header-actions` on the element that groups optional end content with the close action. | Current implementation and owner decision | settled |
+| FR4 | The rendered close Icon MUST carry `dialog-header-close-icon` on the glyph element that applies icon presentation. | Current implementation and owner decision | settled |
+| FR5 | Omitting `onOpenChange` MUST continue to omit the close action and its optional close-icon anatomy. | Released behavior | settled |
 
 ### Transformation and precedence order
 
@@ -96,7 +100,8 @@ existing anatomy.
 | --- | --- | --- | --- |
 | Header row | Owns arrangement and spacing among title content and controls. | This module | FR1 |
 | Title block | Owns title/subtitle grouping and spacing. | This module | FR2 |
-| Close icon | Owns the close glyph's visual box inside the Button-owned action. | This module with Icon rendering | FR3, FR4 |
+| Actions | Owns the trailing group containing optional end content and the close action. | This module | FR3, FR5 |
+| Close icon | Owns the close glyph's visual box inside the Button-owned action. | This module with Icon rendering | FR4, FR5 |
 
 ### Theming anatomy
 
@@ -106,6 +111,7 @@ existing anatomy.
 {
   "Header row": {"target": "dialog-header"},
   "Title block": {"target": "dialog-header-title-block"},
+  "Actions": {"target": "dialog-header-actions"},
   "Close icon": {"target": "dialog-header-close-icon"}
 }
 ```
@@ -113,7 +119,7 @@ existing anatomy.
 ## Parent and system relationships
 
 - `component:Dialog` owns modal behavior and the aggregate Dialog contract.
-- `component:Layout` owns the composed LayoutHeader region outside the three
+- `component:Layout` owns the composed LayoutHeader region outside the four
   module-owned inner parts.
 - `component:Button` owns the close action's control behavior and outer button
   presentation.
@@ -126,9 +132,9 @@ existing anatomy.
 
 | Contract | Verification | Representative states | Mutation or failure expectation |
 | --- | --- | --- | --- |
-| FR1–FR3 | `DialogHeader.test.tsx`, target inventory, generated probe theme, and source inspection | title only, title/subtitle, close action | A target is missing, undocumented, or moved away from its owning painter. |
-| FR4 | Existing close-button presence tests | with and without `onOpenChange` | The optional target renders without the optional close action. |
-| Theming anatomy map | `scripts/check-knowledge.mjs` | all three module anatomy entries and targets | Anatomy, docs, runtime targets, and the module map drift. |
+| FR1–FR4 | `DialogHeader.test.tsx`, target inventory, generated probe theme, and source inspection | title only, title/subtitle, end content, close action | A target is missing, undocumented, or moved away from its owning painter. |
+| FR5 | Existing close-button presence tests | with and without `onOpenChange` | The optional target renders without the optional close action. |
+| Theming anatomy map | `scripts/check-knowledge.mjs` | all four module anatomy entries and targets | Anatomy, docs, runtime targets, and the module map drift. |
 
 ## Decision log
 
@@ -140,6 +146,16 @@ existing anatomy.
 Each public target represents documented anatomy and is applied to the element
 that owns the corresponding visuals. The header row, title block, and close icon
 meet that admission rule and are approved as additive targets.
+
+### DEC-2 — Trailing actions are a stable theming surface
+
+**Reference:** `module:Dialog/DialogHeader/DEC-2`
+**Decider:** pending exact-head owner review
+
+The existing wrapper that groups optional end content with the close action
+qualifies as stable visible anatomy. `dialog-header-actions` exposes that wrapper
+without adding structure or changing default layout, paint, interaction,
+accessibility, or public props.
 
 ## Open questions
 

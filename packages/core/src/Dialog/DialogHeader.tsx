@@ -195,9 +195,12 @@ export function DialogHeader({
         </div>
         {(endContent || onOpenChange) && (
           <div
-            {...stylex.props(
-              styles.actions,
-              onOpenChange && styles.actionsCompensation,
+            {...mergeProps(
+              themeProps('dialog-header-actions'),
+              stylex.props(
+                styles.actions,
+                onOpenChange && styles.actionsCompensation,
+              ),
             )}>
             {endContent}
             {onOpenChange && (

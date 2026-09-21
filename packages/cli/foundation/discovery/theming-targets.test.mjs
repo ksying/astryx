@@ -266,6 +266,7 @@ describe('collectThemingTargets', () => {
     expect(doc.theming.targets).toEqual([
       {className: 'astryx-dialog-header'},
       {className: 'astryx-dialog-header-title-block'},
+      {className: 'astryx-dialog-header-actions'},
       {className: 'astryx-dialog-header-close-icon'},
     ]);
   });
@@ -273,6 +274,7 @@ describe('collectThemingTargets', () => {
   it.each([
     'dialog-header',
     'dialog-header-title-block',
+    'dialog-header-actions',
     'dialog-header-close-icon',
   ])('enumerates %s once under its canonical Dialog owner', async key => {
     const matches = (await enumerated).filter(target => target.key === key);
