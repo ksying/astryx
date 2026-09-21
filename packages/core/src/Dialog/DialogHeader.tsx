@@ -172,7 +172,13 @@ export function DialogHeader({
           stylex.props(styles.container),
         )}>
         {startContent && (
-          <div {...stylex.props(styles.actions)}>{startContent}</div>
+          <div
+            {...mergeProps(
+              themeProps('dialog-header-start-content'),
+              stylex.props(styles.actions),
+            )}>
+            {startContent}
+          </div>
         )}
         <div
           {...mergeProps(
@@ -195,9 +201,12 @@ export function DialogHeader({
         </div>
         {(endContent || onOpenChange) && (
           <div
-            {...stylex.props(
-              styles.actions,
-              onOpenChange && styles.actionsCompensation,
+            {...mergeProps(
+              themeProps('dialog-header-end-content'),
+              stylex.props(
+                styles.actions,
+                onOpenChange && styles.actionsCompensation,
+              ),
             )}>
             {endContent}
             {onOpenChange && (
