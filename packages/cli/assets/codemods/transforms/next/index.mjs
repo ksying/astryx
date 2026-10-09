@@ -7,22 +7,17 @@
  * this file into the resolved version folder.
  */
 
-import migrateThemeCatalogToDescriptors, {
-  meta as migrateThemeCatalogToDescriptorsMeta,
-} from './migrate-theme-catalog-to-descriptors.mjs';
-import migrateNativePickerToPresentation, {
-  meta as migrateNativePickerToPresentationMeta,
-} from './migrate-native-picker-to-presentation.mjs';
+import migrateCopiedThemesToDescriptors, {
+  meta as migrateCopiedThemesToDescriptorsMeta,
+} from './migrate-copied-themes-to-descriptors.mjs';
 
 export default [
   {
-    name: 'migrate-theme-catalog-to-descriptors',
-    transform: migrateThemeCatalogToDescriptors,
-    meta: migrateThemeCatalogToDescriptorsMeta,
-  },
-  {
-    name: 'migrate-native-picker-to-presentation',
-    transform: migrateNativePickerToPresentation,
-    meta: migrateNativePickerToPresentationMeta,
+    name: 'migrate-copied-themes-to-descriptors',
+    transform:
+      /** @type {import('../../../../authoring/codemod/type').CodemodTransform} */ (
+        /** @type {unknown} */ (migrateCopiedThemesToDescriptors)
+      ),
+    meta: migrateCopiedThemesToDescriptorsMeta,
   },
 ];

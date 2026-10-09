@@ -1,6 +1,11 @@
 // Copyright (c) Meta Platforms, Inc. and affiliates.
 
-/** @file Colocated types for integration authoring diagnostics. */
+/**
+ * @file Colocated public types for integration authoring diagnostics.
+ * @input Stable response fields exposed by integration-authoring APIs.
+ * @output JSDoc typedefs consumed by declarations, commands, and callers.
+ * @position Public type boundary for integration diagnostics.
+ */
 
 /**
  * @typedef {object} IntegrationAuthoringOptions
@@ -16,9 +21,7 @@
 /**
  * @typedef {object} IntegrationTemplateConflict
  * @property {string} id
- * @property {'info' | 'warning'} severity
- * @property {'replaces' | 'accidental'} relationship
- * @property {string} [replaces]
+ * @property {'warning'} severity
  * @property {string} integrationPackage
  * @property {'page' | 'block'} integrationType
  * @property {string} integrationName
@@ -46,21 +49,25 @@
  */
 
 /**
+ * Each of the three authoring checks reports `validated`: false means no
+ * integration manifest was found, so nothing was inspected and the empty
+ * conflicts/findings list carries no information about the package.
+ *
  * @typedef {object} IntegrationTemplateConflictResponse
  * @property {'integration.template-conflicts'} type
- * @property {{name: string | null, version: string | null, conflicts: IntegrationTemplateConflict[], issues: import('../../foundation/integrations/issue').AstryxIntegrationIssue[]}} data
+ * @property {{validated: boolean, name: string | null, version: string | null, conflicts: IntegrationTemplateConflict[], issues: import('../../foundation/integrations/issue').AstryxIntegrationIssue[]}} data
  */
 
 /**
  * @typedef {object} IntegrationComponentConflictResponse
  * @property {'integration.component-conflicts'} type
- * @property {{name: string | null, version: string | null, conflicts: IntegrationComponentConflict[], issues: import('../../foundation/integrations/issue').AstryxIntegrationIssue[]}} data
+ * @property {{validated: boolean, name: string | null, version: string | null, conflicts: IntegrationComponentConflict[], issues: import('../../foundation/integrations/issue').AstryxIntegrationIssue[]}} data
  */
 
 /**
  * @typedef {object} IntegrationDocConflictResponse
  * @property {'integration.doc-conflicts'} type
- * @property {{name: string | null, version: string | null, findings: IntegrationDocFinding[], issues: import('../../foundation/integrations/issue').AstryxIntegrationIssue[]}} data
+ * @property {{validated: boolean, name: string | null, version: string | null, findings: IntegrationDocFinding[], issues: import('../../foundation/integrations/issue').AstryxIntegrationIssue[]}} data
  */
 
 export {};
