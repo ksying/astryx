@@ -4,7 +4,7 @@
 
 /**
  * @file BottomSheet.tsx
- * @input Uses React, StyleX, core hooks/utils, named BottomSheetPanel, BottomSheetSwitcherContext
+ * @input Uses React, StyleX, core hooks/utils, modal outlet, named BottomSheetPanel, BottomSheetSwitcherContext
  * @output Exports BottomSheet component and BottomSheetProps
  * @position Public BottomSheet router plus private standalone/switcher hosts
  *
@@ -41,6 +41,7 @@ import type {DialogPurpose} from '../Dialog';
 import type {SpacingStep} from '../utils/types';
 import {colorVars, durationVars, easeVars} from '../theme/tokens.stylex';
 import {useDevWarning, useScrollLock} from '../hooks';
+import {useModalOutlet} from '../Layer/modalOutlet';
 import {isImeKeyEvent} from '../utils';
 import {
   BottomSheetPanel,
@@ -298,6 +299,10 @@ function StandaloneBottomSheet({
       focusPanel(panelRef.current, hasScrim);
     }
   }, [hasScrim, isOpen]);
+
+  // Host app-global surfaces (toasts) inside this modal while it is open, so
+  // they stay visible and operable above it.
+  useModalOutlet(dialogRef, isOpen && hasScrim);
 
   useEffect(() => {
     if (!isOpen && isPresented && hasScrim) {

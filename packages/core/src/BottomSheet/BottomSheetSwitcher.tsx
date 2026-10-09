@@ -4,7 +4,7 @@
 
 /**
  * @file BottomSheetSwitcher.tsx
- * @input Uses React context, StyleX, theme tokens, shared layer dismissal, focus/scroll-lock hooks, BottomSheetSwitcherContext
+ * @input Uses React context, StyleX, theme tokens, shared layer dismissal, modal outlet, focus/scroll-lock hooks, BottomSheetSwitcherContext
  * @output Exports BottomSheetSwitcher and BottomSheetSwitcherProps
  * @position Core switcher for mutually exclusive BottomSheet flows
  *
@@ -54,6 +54,7 @@ import {
 import {LayerDepthProvider} from '../Layer/LayerDepthContext';
 import {dispatchLayerEscapeKeyDown} from '../Layer/layerStack';
 import {useLayerDismissal} from '../Layer/useLayerDismissal';
+import {useModalOutlet} from '../Layer/modalOutlet';
 import {composeEventHandlers, mergeProps} from '../utils';
 import {BottomSheetEdgeTint} from './BottomSheetEdgeTint';
 import {
@@ -353,6 +354,10 @@ export function BottomSheetSwitcher({
     triggerRef.current = null;
     dialogModeRef.current = null;
   }, [hasScrim, isFlowVisible]);
+
+  // Host app-global surfaces (toasts) inside this modal while it is open, so
+  // they stay visible and operable above it.
+  useModalOutlet(dialogRef, isModal);
 
   const getSheetPhase = useCallback(
     (sheetId: string): BottomSheetSwitcherPhase => {
