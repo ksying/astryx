@@ -4,7 +4,7 @@
 
 /**
  * @file MobileNav.tsx
- * @input Uses React, useEffect, useRef, useCallback, ReactNode, StyleX
+ * @input Uses React, useEffect, useRef, useCallback, ReactNode, StyleX, modalOutlet
  * @output Exports MobileNav component and MobileNavProps
  * @position Core implementation; consumed by index.ts
  *
@@ -63,6 +63,7 @@ import {LayerContentBoundary} from '../Layer/layerScopedContext';
 import {overlayPaddingReset} from '../Layout/padding.stylex';
 import {LayerDepthProvider} from '../Layer/LayerDepthContext';
 import {useLayerDismissal} from '../Layer/useLayerDismissal';
+import {useModalOutlet} from '../Layer/modalOutlet';
 import type {BaseProps} from '../BaseProps';
 import {themeProps} from '../utils/themeProps';
 import {useTranslator} from '../i18n';
@@ -529,6 +530,10 @@ export function MobileNav({
       releaseGutter();
     };
   }, [isOpen, releaseGutter]);
+
+  // Host app-global surfaces (toasts) inside this modal while it is open, so
+  // they stay visible and operable above it.
+  useModalOutlet(dialogRef, isOpen);
 
   // Close the native dialog on unmount if it's still open. Inside AppShell the
   // drawer is mounted in an <Activity> that switches to mode="hidden" when the
