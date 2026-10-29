@@ -4,7 +4,7 @@
 
 /**
  * @file CheckboxList.tsx
- * @input Uses React, useId, useOptimistic, useTransition, Field, List, CheckboxListContext
+ * @input Uses React, useId, useOptimistic, useTransition, Field, List, CheckboxListContext, FormLayoutContext
  * @output Exports CheckboxList component, CheckboxListProps
  * @position Core implementation; consumed by index.ts, tested by CheckboxList.test.tsx
  *
@@ -17,6 +17,7 @@
  */
 
 import {
+  use,
   useCallback,
   useId,
   useMemo,
@@ -31,6 +32,7 @@ import {
 import {useMergedRefs} from '../hooks/useMergedRefs';
 import type {SizeValue} from '../utils/types';
 import {Field} from '../Field/Field';
+import {FormLayoutContext} from '../FormLayout/FormLayoutContext';
 import type {InputStatus} from '../Field/types';
 import {List} from '../List/List';
 import type {ListDensity} from '../List/ListContext';
@@ -65,6 +67,13 @@ export interface CheckboxListProps extends Omit<
    * Description text displayed below the label.
    */
   description?: string;
+  /**
+   * Whether the group is optional. Shows the optional indicator after the
+   * group label, unless a surrounding `FormLayout` already makes fields
+   * optional by default.
+   * @default false
+   */
+  isOptional?: boolean;
   /**
    * Status indicator for the checkbox group.
    * When set with a message, displays a colored message box below the group.
@@ -153,6 +162,7 @@ export function CheckboxList({
   label,
   isLabelHidden = false,
   description,
+  isOptional = false,
   status,
   value,
   onChange,
@@ -180,6 +190,7 @@ export function CheckboxList({
     containerClassName,
     containerStyle,
   });
+  const formLayout = use(FormLayoutContext);
   const inputID = useId();
   const labelID = useId();
   const descriptionID = useId();
@@ -262,6 +273,7 @@ export function CheckboxList({
       inputID={inputID}
       labelID={labelID}
       isGroupLabel
+      isOptional={isOptional}
       descriptionID={description ? descriptionID : undefined}
       isDisabled={isDisabled}
       status={
@@ -305,7 +317,16 @@ export function CheckboxList({
               .join(' ') || undefined
           }>
           <List density={density} hasDividers={hasDividers}>
-            {children}
+            {isOptional ? (
+              // The items' checkboxes resolve `aria-required` from the form
+              // default; an optional group must not mark them required.
+              <FormLayoutContext
+                value={{...formLayout, defaultOptionality: undefined}}>
+                {children}
+              </FormLayoutContext>
+            ) : (
+              children
+            )}
           </List>
         </div>
       </CheckboxListContext>
